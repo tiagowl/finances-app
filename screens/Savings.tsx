@@ -1,10 +1,12 @@
-import { Flex, HStack, Text, FlatList } from "native-base";
+import { Flex, HStack, Text, FlatList, Spinner } from "native-base";
 import { TouchableOpacity } from "react-native";
 import BillingInfoBox from "../components/BillingInfoBox";
 import BillingTypeItem from "../components/BillingTypeItem";
 import ExpenseItem, { ExpenseItemProps } from "../components/ExpenseItem";
 import UserInfo from "../components/UserInfo";
 import { ScreenProps } from "../types/screens";
+import { useContext } from "react";
+import { context } from "../contexts";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -18,6 +20,9 @@ const data: ExpenseItemProps[] = [
 
 
 export default function Savings({navigation}: ScreenProps){
+
+    const MainContext = useContext(context);
+
     return(
         <Flex w="100%" minH="100vh" maxH="auto" p="5" bg="gray.100" >
             <TouchableOpacity onPress={()=>navigation && navigation.navigate("Profile")} >
@@ -36,11 +41,12 @@ export default function Savings({navigation}: ScreenProps){
                 <Text color="blueGray.700" fontWeight="bold" fontSize="lg">Savings</Text>
                 <Text fontSize="xs" color="gray.400" >+ Add new</Text>
             </Flex>
-            <FlatList data={data} maxH="72" renderItem={({item})=>
-                <TouchableOpacity onPress={()=>navigation && navigation.navigate("SavingItem")} >
-                    <ExpenseItem title={item.title} subTitle={item.subTitle} price={item.price} />
+            {MainContext?.loading ? <Spinner size="sm" m="0 auto" /> : 
+            <FlatList data={MainContext?.savings} maxH="72" renderItem={({item})=>
+                <TouchableOpacity onPress={()=>navigation && navigation.navigate("SavingItem", {savingId: item.id})} >
+                    <ExpenseItem title={item.name} subTitle={`${item.expense}`} price={item.total} />
                 </TouchableOpacity>
-             } />
+             } />}
         </Flex>
     )
 }

@@ -1,7 +1,12 @@
 import { HStack, Avatar, Center, Flex, Text } from "native-base";
+import { useContext } from "react";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { context } from "../contexts";
 
 export default function UserInfo(){
+
+    const Maincontext = useContext(context);
+
     return(
         <HStack alignItems="center" space="2.5" mb="4" >  
           <Avatar bg="green.500" size="md" source={{
@@ -18,7 +23,7 @@ export default function UserInfo(){
         </Center>
           <Flex>
               <Text fontSize="xs" >Tiago Landi</Text>
-              <Text fontSize="sm" fontWeight="bold" >R$ 4000</Text>
+              <Text fontSize="sm" fontWeight="bold" >R$ {Maincontext?.salary}</Text>
           </Flex>
         </HStack>
     )
