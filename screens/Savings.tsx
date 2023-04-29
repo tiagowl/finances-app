@@ -1,12 +1,14 @@
-import { Flex, HStack, Text, FlatList, Spinner } from "native-base";
+import { Button, Flex, HStack, Text, FlatList, Spinner, Modal, FormControl, Input } from "native-base";
 import { TouchableOpacity } from "react-native";
 import BillingInfoBox from "../components/BillingInfoBox";
 import BillingTypeItem from "../components/BillingTypeItem";
 import ExpenseItem, { ExpenseItemProps } from "../components/ExpenseItem";
 import UserInfo from "../components/UserInfo";
 import { ScreenProps } from "../types/screens";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { context } from "../contexts";
+import { Saving } from "../types/saving";
+import supabase from "../services/supabase";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -18,10 +20,65 @@ const data: ExpenseItemProps[] = [
     {title: "Faculdade Senac", price: 1250, subTitle: "Mensal"},
 ]
 
+interface CreateSavingModalProps{
+    open: boolean;
+}
+
+const CreateSavingModal = ({open}: CreateSavingModalProps) => {
+
+    const [openModal, setOpen] = useState(false);
+    const [saving, setSaving] = useState<Partial<Saving>>({name: "", expense: 0, total: 0});
+    const [loading, setLoading] = useState(false);
+    const MainContext = useContext(context);
+
+    const createExpense = async() => {
+        setLoading(true);
+        const {data, error} = await supabase.from("savings").insert([saving]);
+        if(!error){
+           setLoading(false);
+           MainContext.fetchSavings();
+           setOpen(false);
+        }
+    }
+
+    useEffect(()=>{
+        if(open === true){
+            setOpen(true);
+        }else{
+            setOpen(false);
+        }
+    }, [open])
+
+    return(
+        <Modal isOpen={openModal} onClose={() => setOpen(false)} avoidKeyboard justifyContent="flex-end" bottom="4" size="lg">
+        <Modal.Content>
+          <Modal.CloseButton />
+          <Modal.Header>New Expense</Modal.Header>
+          <Modal.Body>
+            <FormControl>
+                    <FormControl.Label>Name</FormControl.Label>
+                    <Input value={saving?.name} onChangeText={(value)=>setSaving({...saving, name: value})} />
+            </FormControl>
+            <FormControl mt="3">
+                <FormControl.Label>Plan</FormControl.Label>
+                <Input value={`${saving?.expense}`} onChangeText={(value)=>setSaving({...saving, expense: Number(value)})} />
+            </FormControl>    
+          </Modal.Body>
+          <Modal.Footer>
+            <Button isLoading={loading} flex="1" bg="blue.500" onPress={createExpense}>
+              Proceed
+            </Button>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    )
+}
+
 
 export default function Savings({navigation}: ScreenProps){
 
     const MainContext = useContext(context);
+    const [openCreateSavingModal, setOpenCreateSavingModal] = useState(false)
 
     return(
         <Flex w="100%" minH="100vh" maxH="auto" p="5" bg="gray.100" >
@@ -39,7 +96,9 @@ export default function Savings({navigation}: ScreenProps){
             </HStack>
             <Flex flexDirection="row" w="100%" alignItems="center" mb="4" justifyContent="space-between" >
                 <Text color="blueGray.700" fontWeight="bold" fontSize="lg">Savings</Text>
-                <Text fontSize="xs" color="gray.400" >+ Add new</Text>
+                <TouchableOpacity onPress={()=>setOpenCreateSavingModal(true)} >
+                    <Text fontSize="xs" color="gray.400" >+ Add new</Text>
+                </TouchableOpacity>
             </Flex>
             {MainContext?.loading ? <Spinner size="sm" m="0 auto" /> : 
             <FlatList data={MainContext?.savings} maxH="72" renderItem={({item})=>
@@ -47,6 +106,7 @@ export default function Savings({navigation}: ScreenProps){
                     <ExpenseItem title={item.name} subTitle={`${item.expense}`} price={item.total} />
                 </TouchableOpacity>
              } />}
+             <CreateSavingModal open={openCreateSavingModal}/>
         </Flex>
     )
 }

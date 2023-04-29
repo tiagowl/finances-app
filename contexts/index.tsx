@@ -11,7 +11,10 @@ export interface ContextData{
     fetchExpenses: ()=>Promise<void>;
     expenses: Expense[];
     savings: Saving[];
-    fetchSavings: () => Promise<void>
+    fetchSavings: () => Promise<void>;
+    income: number;
+    avatar: string;
+    fetchUserData: ()=>Promise<void>;
 }
 
 export const context = React.createContext<ContextData>({
@@ -37,6 +40,16 @@ export const context = React.createContext<ContextData>({
             
         })
     },
+    income: 0,
+    avatar: "",
+    async fetchUserData(){
+        return await fetch("").then((response) => {
+            return response.json();
+        })
+        .then((data) => {
+            
+        })
+    }
 });
 
 interface Props{
@@ -51,12 +64,16 @@ export default function MainContext(props: Props){
     const [savings, setSavings] = React.useState<Saving[]>();
     const [totalExpenses, setTotal] = React.useState(0);
     const [remaining, setRemaining] = React.useState(0);
+    const [income, setIncome] = useState(0);
+    const [avatar, setAvatar] = useState("");
 
     const fetchUserData = async () => {
         setLoading(true);
         let { data: users, error } = await supabase.from('users').select('*').range(0,0);
         if(users){
           setSalary(users[0]?.salary as number);
+          setIncome(users[0]?.income as number);
+          setAvatar(users[0]?.avatar_url)
           setLoading(false);
         }
     }
@@ -103,7 +120,17 @@ export default function MainContext(props: Props){
     }, [expenses, savings, salary])
 
     return(
-        <context.Provider value={{loading, salary, totalExpenses, remaining, expenses: expenses as Expense[], fetchExpenses, fetchSavings, savings: savings as Saving[]}}>
+        <context.Provider value={{fetchUserData, 
+                                  avatar, 
+                                  loading, 
+                                  salary, 
+                                  totalExpenses, 
+                                  remaining, 
+                                  expenses: expenses as Expense[], 
+                                  fetchExpenses, 
+                                  fetchSavings, 
+                                  savings: savings as Saving[], 
+                                  income}}>
             {props.children}
         </context.Provider>
     )

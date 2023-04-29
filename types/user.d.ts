@@ -3,4 +3,5 @@ export interface User{
     salary: number;
     income: number;
     name: string;
+    avatar_url: string;
 }

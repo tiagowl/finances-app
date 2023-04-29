@@ -15,7 +15,7 @@ export default function BillingInfoBox(){
             <Flex flexDirection="row" w="100%">
               <BillingInfoItem title="Total Expenses" valor={Maincontext?.totalExpenses} />
               <Divider orientation="vertical" mr="10"/>
-              <BillingInfoItem title="Income" valor={200} />
+              <BillingInfoItem title="Income" valor={Maincontext?.income} />
             </Flex>
           </>}
         </Box>
