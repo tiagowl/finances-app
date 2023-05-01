@@ -84,31 +84,32 @@ export default function MainPage({navigation}: ScreenProps){
     const [openNewExpenseModal, setOpenNewExpenseModal] = useState(false);
 
     return(
-        <Flex w="100%" minH="100vh" maxH="auto" p="5" bg="gray.100" >
-            <TouchableOpacity onPress={()=>navigation && navigation.navigate("Profile")} >
-                <UserInfo/>
-            </TouchableOpacity>
-            <BillingInfoBox/>
-            <HStack space="4" mb="4" >
-                <TouchableOpacity onPress={()=>navigation && navigation.navigate("Main")} >
-                    <BillingTypeItem icon="money-bill-wave-alt" type="Expenses" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={()=>navigation && navigation.navigate("Savings")} >
-                    <BillingTypeItem icon="money-bill-wave-alt" type="Savings" />
-                </TouchableOpacity>
-            </HStack>
-            <Flex flexDirection="row" w="100%" alignItems="center" mb="4" justifyContent="space-between" >
-                <Text color="blueGray.700" fontWeight="bold" fontSize="lg">Expenses</Text>
-                <TouchableOpacity onPress={()=>setOpenNewExpenseModal(true)} >
-                    <Text fontSize="xs" color="gray.400" >+ Add new</Text>
-                </TouchableOpacity>
+        <Flex w="100%" minH="100vh" maxH="auto" bg="gray.100" >
+            <Flex px="5" py="2" bg="gray.800" h="auto" >
+                <BillingInfoBox/>
+                <HStack space="4" mb="1" >
+                    <TouchableOpacity onPress={()=>navigation && navigation.navigate("Main")} >
+                        <BillingTypeItem icon="money-bill-wave-alt" type="Expenses" />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={()=>navigation && navigation.navigate("Savings")} >
+                        <BillingTypeItem icon="money-bill-wave-alt" type="Savings" />
+                    </TouchableOpacity>
+                </HStack>
             </Flex>
-            {MainContext.loading ? <Spinner color="blueGray.700" size="sm" m="0 auto" /> : 
-            <FlatList data={MainContext.expenses} maxH="72" renderItem={({item})=> 
-                <TouchableOpacity onPress={()=>navigation && navigation.navigate("ExpenseItem", {expenseId: item.id})} >
-                    <ExpenseItem title={item.name} subTitle={item.plan} price={item.price} />
-                </TouchableOpacity>
-            } />}
+            <Flex px="5" py="2" h="auto" >
+                <Flex flexDirection="row" w="100%" alignItems="center" mb="4" justifyContent="space-between" >
+                    <Text color="blueGray.700" fontWeight="bold" fontSize="lg">Expenses</Text>
+                    <TouchableOpacity onPress={()=>setOpenNewExpenseModal(true)} >
+                        <Text fontSize="xs" color="gray.400" >+ Add new</Text>
+                    </TouchableOpacity>
+                </Flex>
+                {MainContext.loading ? <Spinner color="blueGray.700" size="sm" m="0 auto" /> : 
+                <FlatList data={MainContext.expenses} maxH="72" renderItem={({item})=> 
+                    <TouchableOpacity onPress={()=>navigation && navigation.navigate("ExpenseItem", {expenseId: item.id})} >
+                        <ExpenseItem title={item.name} subTitle={item.plan} price={item.price} />
+                    </TouchableOpacity>
+                } />}
+            </Flex>
             <CreateExpenseModal open={openNewExpenseModal} />
         </Flex>
     )

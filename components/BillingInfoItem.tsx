@@ -9,8 +9,8 @@ interface BillingInfoItemProps{
 export default function BillingInfoItem({title, valor, big}: BillingInfoItemProps){
     return(
         <Flex flexDirection="column" mr="10" >
-            <Text fontSize="sm" color="blue.300" >{title}</Text>
-            <Text fontSize={big ? "4xl" : "lg"} fontWeight="bold" color="white" >{valor}</Text>
+            <Text fontSize="xs" color="black" >{title}</Text>
+            <Text fontSize={big ? "3xl" : "lg"} fontWeight="bold" color="black" >{valor}</Text>
         </Flex>
     )
 }

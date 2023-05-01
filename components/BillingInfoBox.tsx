@@ -8,7 +8,7 @@ export default function BillingInfoBox(){
     const Maincontext = useContext(context);
 
     return(
-        <Box bg="blue.500" mb="4" maxH="auto" justifyContent="center" minH="40" p="5" borderRadius="lg">
+        <Box bg="green.200" mb="4" maxH="auto" justifyContent="center" minH="40" p="5" borderRadius="lg">
           {Maincontext.loading ? <Spinner color="blueGray.700" size="sm" m="0 auto" /> : 
           <>
             <BillingInfoItem big title="Salary Remaining" valor={Maincontext?.remaining} />

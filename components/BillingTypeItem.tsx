@@ -10,10 +10,10 @@ interface BillingTypeItemProps{
 export default function BillingTypeItem({icon, type, navigate}: BillingTypeItemProps){
     return(
       <Flex>
-        <Circle size="3rem" bg="white" mb="2" >
-          <Icon name={icon} size={20} color="#162237" />
+        <Circle size="3rem" bg="gray.600" mb="2" >
+          <Icon name={icon} size={20} color="white" />
         </Circle>
-        <Text color="blueGray.700" >{type}</Text>
+        <Text color="white" >{type}</Text>
       </Flex>
     )
   }
