@@ -5,6 +5,8 @@ import Savings from "../screens/Savings";
 import Profile from "../screens/Profile";
 import ExpenseItem from "../screens/ExpenseItem";
 import SavingItem from "../screens/SavingItem";
+import { RootStackParamList } from "types/routes";
+import { FunctionComponent } from "react";
 
 const Stack = createStackNavigator();
 
@@ -16,11 +18,11 @@ export default function Routes() {
   return (
     <NavigationContainer>
         <Stack.Navigator>
-            <Stack.Screen options={options} name="Main" component={MainPage} />
-            <Stack.Screen options={options} name="Savings" component={Savings} />
+            <Stack.Screen options={options} name="Main" component={MainPage as FunctionComponent<{}>} />
+            <Stack.Screen options={options} name="Savings" component={Savings as FunctionComponent<{}>} />
             <Stack.Screen name="Profile" component={Profile} />
-            <Stack.Screen name="ExpenseItem" component={ExpenseItem} />
-            <Stack.Screen name="SavingItem" component={SavingItem} />
+            <Stack.Screen name="ExpenseItem" component={ExpenseItem as FunctionComponent<{}>} />
+            <Stack.Screen name="SavingItem" component={SavingItem as  FunctionComponent<{}> } />
         </Stack.Navigator>
     </NavigationContainer>
   );

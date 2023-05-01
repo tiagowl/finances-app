@@ -9,6 +9,7 @@ import { useContext, useEffect, useState } from "react";
 import { context } from "../contexts";
 import { Saving } from "../types/saving";
 import supabase from "../services/supabase";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -19,6 +20,24 @@ const data: ExpenseItemProps[] = [
     {title: "Faculdade Senac", price: 1250, subTitle: "Mensal"},
     {title: "Faculdade Senac", price: 1250, subTitle: "Mensal"},
 ]
+
+type SavingStackParamList = {
+    SavingItem: {savingId: number};
+    Profile: undefined;
+    Main: undefined;
+    Savings: undefined;
+}
+
+type SavingScreenNavigationProp = StackNavigationProp<SavingStackParamList, 'SavingItem'>;
+
+interface SavingDetailsScreenProps {
+    route: {
+      params: {
+        expenseId: number;
+      }
+    },
+    navigation?: SavingScreenNavigationProp
+}
 
 interface CreateSavingModalProps{
     open: boolean;
@@ -75,7 +94,7 @@ const CreateSavingModal = ({open}: CreateSavingModalProps) => {
 }
 
 
-export default function Savings({navigation}: ScreenProps){
+export default function Savings({navigation}: SavingDetailsScreenProps){
 
     const MainContext = useContext(context);
     const [openCreateSavingModal, setOpenCreateSavingModal] = useState(false)
