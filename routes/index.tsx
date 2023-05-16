@@ -17,7 +17,7 @@ const options = {
 export default function Routes() {
   return (
     <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Main">
             <Stack.Screen options={options} name="Main" component={MainPage as FunctionComponent<{}>} />
             <Stack.Screen options={options} name="Savings" component={Savings as FunctionComponent<{}>} />
             <Stack.Screen name="Profile" component={Profile} />

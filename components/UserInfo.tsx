@@ -2,6 +2,7 @@ import { HStack, Avatar, Center, Flex, Text } from "native-base";
 import { useContext } from "react";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { context } from "../contexts";
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function UserInfo(){
 
@@ -19,7 +20,7 @@ export default function UserInfo(){
               lg: 30,
               base: 35
           }}>
-            <Icon name="money-bill" size={17} color="white" />
+            <FontAwesome5 name="money-bill" size={17} color="white" />
         </Center>
           <Flex>
               <Text fontSize="xs" >Tiago Landi</Text>

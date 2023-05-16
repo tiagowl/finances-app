@@ -1,5 +1,6 @@
 import { Flex, Circle, Text } from "native-base";
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export interface ExpenseItemProps{
     title: string;
@@ -12,7 +13,7 @@ export default function ExpenseItem({title, price, subTitle}: ExpenseItemProps){
         <Flex bg="white" w="100%" mb="2" borderRadius="md" py="3" px="4" flexDirection="row" justifyContent="space-between" >
             <Flex flexDirection="row" >
                 <Circle size="3rem" bg="gray.100" mb="2" mr="3" >
-                    <Icon name="money-bill" size={20} color="#162237" />
+                    <FontAwesome5 name="money-bill" size={20} color="#162237" />
                 </Circle>
                 <Flex mr="20" >
                     <Text color="blueGray.700" fontSize="lg" w="20" fontWeight="semibold" >{title}</Text>

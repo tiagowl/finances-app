@@ -9,6 +9,8 @@ import { TouchableOpacity } from "react-native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/routes";
 import { context } from "../contexts";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -127,10 +129,10 @@ export default function ExpenseItem({route, navigation}: ExpenseDetailsScreenPro
                 <ExpenseItemInfo name="Plan" info={`${expense?.plan}`} />
                 <ExpenseItemInfo name="Price" info={`${expense?.price}`} />
                 <TouchableOpacity onPress={()=>setOpenUpdateExpenseModal(true)} >
-                    <Icon name="pencil-box" size={20} color="#162237" />
+                    <MaterialCommunityIcons name="pencil-box" size={20} color="#162237" />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={deleteExpense} >
-                    <Icon name="close-box-multiple" size={20} color="#162237" />
+                    <MaterialCommunityIcons name="close-box-multiple" size={20} color="#162237" />
                 </TouchableOpacity>
             </HStack>}
             <UpdateExpenseModal id={expenseId} open={openUpdateExpenseModal} />

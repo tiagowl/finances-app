@@ -9,6 +9,7 @@ import { context } from "../contexts";
 import { TouchableOpacity } from "react-native";
 import { Expense } from "../types/expense";
 import supabase from "../services/supabase";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -22,6 +23,24 @@ const data: ExpenseItemProps[] = [
 
 interface CreateExpenseModalProps{
     open: boolean;
+}
+
+type ExpenseStackParamList = {
+    ExpenseItem: {expenseId: number};
+    Profile: undefined;
+    Main: undefined;
+    Savings: undefined;
+}
+
+type ExpenseScreenNavigationProp = StackNavigationProp<ExpenseStackParamList, 'ExpenseItem'>;
+
+interface ExpenseDetailsScreenProps {
+    route: {
+      params: {
+        expenseId: number;
+      }
+    },
+    navigation?: ExpenseScreenNavigationProp
 }
 
 const CreateExpenseModal = ({open}: CreateExpenseModalProps) => {
@@ -78,7 +97,7 @@ const CreateExpenseModal = ({open}: CreateExpenseModalProps) => {
     )
 }
 
-export default function MainPage({navigation}: ScreenProps){
+export default function MainPage({navigation}: ExpenseDetailsScreenProps){
 
     const MainContext = useContext(context);
     const [openNewExpenseModal, setOpenNewExpenseModal] = useState(false);

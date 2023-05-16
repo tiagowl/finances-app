@@ -3,7 +3,7 @@ import theme from './theme';
 import React from 'react';
 import Routes from './routes';
 import MainContext from "./contexts";
-import Expo from 'expo';
+import "react-native-url-polyfill/auto";
 
 
 export default function App() {
