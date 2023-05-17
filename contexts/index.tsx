@@ -2,6 +2,8 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { Expense } from "../types/expense";
 import { Saving } from "../types/saving";
 import supabase from "../services/supabase";
+import useFetch from "../hooks/useFetch";
+import { User } from "types/user";
 
 export interface ContextData{
     loading: boolean;
@@ -66,14 +68,15 @@ export default function MainContext(props: Props){
     const [remaining, setRemaining] = React.useState(0);
     const [income, setIncome] = useState(0);
     const [avatar, setAvatar] = useState("");
+    const {get, data, error} = useFetch<User[]>();
 
     const fetchUserData = async () => {
         setLoading(true);
-        let { data: users, error } = await supabase.from('users').select('*').range(0,0);
-        if(users){
-          setSalary(users[0]?.salary as number);
-          setIncome(users[0]?.income as number);
-          setAvatar(users[0]?.avatar_url)
+        get("/users?select=*");
+        if(data){
+          setSalary(data[0]?.salary as number);
+          setIncome(data[0]?.income as number);
+          setAvatar(data[0]?.avatar_url)
           setLoading(false);
         }
     }
