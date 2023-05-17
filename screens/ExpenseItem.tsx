@@ -10,6 +10,7 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/routes";
 import { context } from "../contexts";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import useFetch from "../hooks/useFetch";
 
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
@@ -34,19 +35,22 @@ const UpdateExpenseModal = ({open, id}: UpdateExpenseModalProps) => {
     const [loading, setLoading] = useState(false);
     const [expense, setExpense] = useState<Partial<Expense>>({name: "", plan: "", price: 0});
     const MainContext = useContext(context);
+    const {get, data, error, put} = useFetch<Expense[]>();
 
     const fetchExpense = async() => {
         setLoading(true);
-        let {data: expenses, error} = await supabase.from("expenses").select("*").eq("id", `${id}`);
-        if(expenses){
+        //let {data: expenses, error} = await supabase.from("expenses").select("*").eq("id", `${id}`);
+        get(`expenses?id=eq.${id}&select=*`);
+        if(data){
             setLoading(false);
-            setExpense(expenses[0] as Expense);
+            setExpense(data[0] as Expense);
         }
     }
 
     const updateExpense = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("expenses").update(expense).eq("id", `${id}`);
+        //const {data, error} = await supabase.from("expenses").update(expense).eq("id", `${id}`);
+        put(`/expenses?id=eq.${id}`, expense)
         if(!error){
             MainContext.fetchExpenses();
             setOpen(false);
@@ -98,13 +102,15 @@ export default function ExpenseItem({route, navigation}: ExpenseDetailsScreenPro
     const [loading, setLoading] = useState(false);
     const MainContext = useContext(context);
     const [openUpdateExpenseModal, setOpenUpdateExpenseModal] = useState(false);
+    const {get, data} = useFetch<Expense[]>();
 
     const fetchExpense = async() => {
         setLoading(true);
-        let {data: expenses, error} = await supabase.from("expenses").select("*").eq("id", `${expenseId}`);
-        if(expenses){
+        //let {data: expenses, error} = await supabase.from("expenses").select("*").eq("id", `${expenseId}`);
+        get(`/expenses?id=eq.${expenseId}&select=*`)
+        if(data){
             setLoading(false);
-            setExpense(expenses[0] as Expense);
+            setExpense(data[0] as Expense);
         }
     }
 

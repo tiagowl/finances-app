@@ -10,6 +10,7 @@ import { context } from "../contexts";
 import { Saving } from "../types/saving";
 import supabase from "../services/supabase";
 import { StackNavigationProp } from "@react-navigation/stack";
+import useFetch from "../hooks/useFetch";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -49,10 +50,12 @@ const CreateSavingModal = ({open}: CreateSavingModalProps) => {
     const [saving, setSaving] = useState<Partial<Saving>>({name: "", expense: 0, total: 0});
     const [loading, setLoading] = useState(false);
     const MainContext = useContext(context);
+    const {post, error} = useFetch();
 
     const createExpense = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("savings").insert([saving]);
+        //const {data, error} = await supabase.from("savings").insert([saving]);
+        post("savings", saving);
         if(!error){
            setLoading(false);
            MainContext.fetchSavings();

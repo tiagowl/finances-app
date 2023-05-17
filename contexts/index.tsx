@@ -1,9 +1,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { Expense } from "../types/expense";
 import { Saving } from "../types/saving";
-import supabase from "../services/supabase";
-import useFetch from "../hooks/useFetch";
-import { User } from "types/user";
+import api from "../services/api";
 
 export interface ContextData{
     loading: boolean;
@@ -68,33 +66,32 @@ export default function MainContext(props: Props){
     const [remaining, setRemaining] = React.useState(0);
     const [income, setIncome] = useState(0);
     const [avatar, setAvatar] = useState("");
-    const {get, data, error} = useFetch<User[]>();
 
     const fetchUserData = async () => {
         setLoading(true);
-        get("/users?select=*");
-        if(data){
-          setSalary(data[0]?.salary as number);
-          setIncome(data[0]?.income as number);
-          setAvatar(data[0]?.avatar_url)
+        const response = await api.get("/users?select=*");
+        if(response?.data){
+          setSalary(response?.data[0]?.salary as number);
+          setIncome(response?.data[0]?.income as number);
+          setAvatar(response?.data[0]?.avatar_url)
           setLoading(false);
         }
     }
 
     const fetchExpenses = async () =>{
         setLoading(true);
-        let { data: expenses, error } = await supabase.from('expenses').select('*');
-        if(expenses){
+        const response = await api.get("/expenses?select=*");
+        if(response?.data){
             setLoading(false);
-            setExpenses(expenses as Expense[]);
+            setExpenses(response?.data as Expense[]);
         }
     }
     
     const fetchSavings = async() => {
         setLoading(true)
-        let { data: savings, error } = await supabase.from('savings').select('*');
-        if(savings){
-            setSavings(savings as Saving[]);
+        const response = await api.get("/savings?select=*");
+        if(response?.data){
+            setSavings(response?.data as Saving[]);
             setLoading(false);
         }
     }

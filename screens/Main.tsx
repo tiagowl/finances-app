@@ -10,6 +10,7 @@ import { TouchableOpacity } from "react-native";
 import { Expense } from "../types/expense";
 import supabase from "../services/supabase";
 import { StackNavigationProp } from "@react-navigation/stack";
+import useFetch from "../hooks/useFetch";
 
 const data: ExpenseItemProps[] = [
     {title: "Plus extra", price: 299, subTitle: "3 meses"},
@@ -49,10 +50,11 @@ const CreateExpenseModal = ({open}: CreateExpenseModalProps) => {
     const [expense, setExpense] = useState<Partial<Expense>>({name: "", plan: "", price: 0});
     const [loading, setLoading] = useState(false);
     const MainContext = useContext(context);
+    const {post, error} = useFetch();
 
     const createExpense = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("expenses").insert([expense]);
+        post("/expenses", expense);
         if(!error){
            setLoading(false);
            MainContext.fetchExpenses();
