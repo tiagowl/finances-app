@@ -2,11 +2,12 @@ import { Button, FormControl, HStack, Input, Modal, Spinner, useToast } from "na
 import ExpenseInfo from "../components/ExpenseInfo";
 import ExpenseItemInfo from "../components/ExpenseItemInfo";
 import { useContext, useEffect, useState } from "react";
-import { Saving } from "../types/saving";
 import supabase from "../services/supabase";
 import { context } from "../contexts";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../types/routes";
+import useFetch from "../hooks/useFetch";
+import { Saving } from "../types/saving";
 
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Main'>;
 
@@ -33,16 +34,18 @@ const Remove = ({open, id}: UpdateSavingModalProps) => {
     const [loading, setLoading] = useState(false);
     const [total, setTotal] = useState(0);
     const toast = useToast();
+    const {del, error, get, data, put} = useFetch<Saving[]>();
 
     const getExpense = async() => {
         setLoading(true)
-        let { data: savings } = await supabase
-        .from('savings')
-        .select('expense, total')
-        .eq("id", `${id}`);
-        if(savings){
-            setExpense(savings[0]?.expense);
-            setTotal(savings[0]?.total);
+        //let { data: savings } = await supabase
+        //.from('savings')
+        //.select('expense, total')
+        //.eq("id", `${id}`);
+        get(`/expenses?id=eq.${id}&select=expense,total`);
+        if(data){
+            setExpense(data[0]?.expense as number);
+            setTotal(data[0]?.total as number);
             setLoading(false)
         }
     }
@@ -54,10 +57,11 @@ const Remove = ({open, id}: UpdateSavingModalProps) => {
             toast.show({description: "quantity to be saved is greater than available quantity", variant: "solid"});
             setLoading(false);
         }else{
-            const { error } = await supabase
-            .from('savings')
-            .update({ total: `${total - remove}` })
-            .eq('id', `${id}`);
+            //const { error } = await supabase
+            //.from('savings')
+            //.update({ total: `${total - remove}` })
+            //.eq('id', `${id}`);
+            put(`/expenses?id=eq.${id}`, {total: `${total - remove}`});
             if(!error){
                 fetchSavings();
                 setLoading(false)

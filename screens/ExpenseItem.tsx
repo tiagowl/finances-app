@@ -102,7 +102,7 @@ export default function ExpenseItem({route, navigation}: ExpenseDetailsScreenPro
     const [loading, setLoading] = useState(false);
     const MainContext = useContext(context);
     const [openUpdateExpenseModal, setOpenUpdateExpenseModal] = useState(false);
-    const {get, data} = useFetch<Expense[]>();
+    const {get, data, del, error} = useFetch<Expense[]>();
 
     const fetchExpense = async() => {
         setLoading(true);
@@ -116,7 +116,8 @@ export default function ExpenseItem({route, navigation}: ExpenseDetailsScreenPro
 
     const deleteExpense = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("expenses").delete().eq("id", `${expenseId}`);
+        //const {data, error} = await supabase.from("expenses").delete().eq("id", `${expenseId}`);
+        del(`/expenses?id=eq.${expenseId}`)
         if(!error){
             MainContext.fetchExpenses();
             navigation?.navigate("Main");
