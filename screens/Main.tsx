@@ -2,13 +2,11 @@ import { Button, FlatList, Flex, FormControl, HStack, Input, Modal, Spinner, Tex
 import ExpenseItem, { ExpenseItemProps } from "../components/ExpenseItem";
 import React, { useContext, useEffect, useState } from "react";
 import BillingTypeItem from "../components/BillingTypeItem";
-import { ScreenProps } from "../types/screens";
 import UserInfo from "../components/UserInfo";
 import BillingInfoBox from "../components/BillingInfoBox";
 import { context } from "../contexts";
 import { TouchableOpacity } from "react-native";
 import { Expense } from "../types/expense";
-import supabase from "../services/supabase";
 import { StackNavigationProp } from "@react-navigation/stack";
 import useFetch from "../hooks/useFetch";
 

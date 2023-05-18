@@ -4,9 +4,9 @@ import IconList from "react-native-vector-icons/Octicons";
 import { context } from "../contexts";
 import { useContext, useEffect, useState } from "react";
 import { User } from "../types/user";
-import supabase from "../services/supabase";
 import { TouchableOpacity } from "react-native";
 import IconSave from "react-native-vector-icons/MaterialIcons";
+import useFetch from "../hooks/useFetch";
 
 interface UpdateExpenseModalProps{
     open: boolean;
@@ -19,19 +19,22 @@ const AddIncome = ({open}: UpdateExpenseModalProps) => {
     const [loading, setLoading] = useState(false);
     const [income, setIncome] = useState(0);
     const MainContext = useContext(context);
+    const {get, data, error, put} = useFetch<User[]>();
 
     const fetchUser = async() => {
         setLoading(true);
-        let {data: users, error} = await supabase.from("users").select("*").eq("id", `2`);
-        if(users){
+        //let {data: users, error} = await supabase.from("users").select("*").eq("id", `2`);
+        get(`/users?id=eq.2&select=*`);
+        if(data){
             setLoading(false);
-            setUser(users[0] as User);
+            setUser(data[0] as User);
         }
     }
 
     const updateUser = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("users").update({income: user?.income != undefined && income + user?.income}).eq("id", `2`);
+        //const {data, error} = await supabase.from("users").update({income: user?.income != undefined && income + user?.income}).eq("id", `2`);
+        put("/users?id=eq.2", {income: user?.income != undefined && income + user?.income})
         if(!error){
             MainContext.fetchUserData();
             setOpen(false);
@@ -75,19 +78,22 @@ const UpdateUserModal = ({open}: UpdateExpenseModalProps) => {
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState<Partial<User>>({avatar_url: "", salary: 0});
     const MainContext = useContext(context);
+    const {get, put, data, error} = useFetch<User[]>();
 
     const fetchUser = async() => {
         setLoading(true);
-        let {data: users, error} = await supabase.from("users").select("*").eq("id", `2`);
-        if(users){
+        //let {data: users, error} = await supabase.from("users").select("*").eq("id", `2`);
+        get("/users?id=eq.2&select=*");
+        if(data){
             setLoading(false);
-            setUser(users[0] as User);
+            setUser(data[0] as User);
         }
     }
 
     const updateUser = async() => {
         setLoading(true);
-        const {data, error} = await supabase.from("users").update(user).eq("id", `2`);
+        //const {data, error} = await supabase.from("users").update(user).eq("id", `2`);
+        put("/user?id=eq.2", user);
         if(!error){
             MainContext.fetchUserData();
             setOpen(false);

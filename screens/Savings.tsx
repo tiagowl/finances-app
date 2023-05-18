@@ -4,11 +4,9 @@ import BillingInfoBox from "../components/BillingInfoBox";
 import BillingTypeItem from "../components/BillingTypeItem";
 import ExpenseItem, { ExpenseItemProps } from "../components/ExpenseItem";
 import UserInfo from "../components/UserInfo";
-import { ScreenProps } from "../types/screens";
 import { useContext, useEffect, useState } from "react";
 import { context } from "../contexts";
 import { Saving } from "../types/saving";
-import supabase from "../services/supabase";
 import { StackNavigationProp } from "@react-navigation/stack";
 import useFetch from "../hooks/useFetch";
 
